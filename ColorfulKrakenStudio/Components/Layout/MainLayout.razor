@@ -1,0 +1,32 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <header class="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="navbar-logo">ColorfulKrakenStudio</a>
+
+            <nav class="navbar-links">
+                <a href="/tutorials">Tutorials</a>
+                <a href="/articles">Articles</a>
+                <a href="/plans">Plans</a>
+            </nav>
+
+            <div class="navbar-auth">
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="navbar-user">Hi, Helio<!--@context.User.Identity?.Name--></span>
+                        <a href="/account">My account</a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a href="/register" class="btn-register">Sign up</a>
+                        <a href="/login" class="btn-login">Log in</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        @Body
+    </main>
+</div>

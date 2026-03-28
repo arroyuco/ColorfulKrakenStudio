@@ -1,0 +1,187 @@
+﻿.tut-header {
+    padding: 2rem 1.5rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+    .tut-header h1 {
+        font-size: 1.75rem;
+        font-weight: 500;
+        margin: 0 0 6px;
+    }
+
+    .tut-header p {
+        color: #666;
+        margin: 0;
+        font-size: 14px;
+    }
+
+.filters {
+    display: flex;
+    gap: 8px;
+    padding: 0 1.5rem 1.25rem;
+    max-width: 900px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.filter {
+    font-size: 13px;
+    padding: 5px 14px;
+    border-radius: 99px;
+    border: 1px solid #ddd;
+    background: transparent;
+    color: #555;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+    .filter.on {
+        background: #111;
+        color: #fff;
+        border-color: #111;
+    }
+
+    .filter:hover:not(.on) {
+        border-color: #aaa;
+    }
+
+.tut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    padding: 0 1.5rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tut-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.tut-thumb {
+    height: 120px;
+    background: #f5f5f5;
+}
+
+.thumb-1 {
+    background: #EEEDFE;
+}
+
+.thumb-2 {
+    background: #E1F5EE;
+}
+
+.thumb-3 {
+    background: #FAECE7;
+}
+
+.thumb-4 {
+    background: #FAEEDA;
+}
+
+.thumb-5 {
+    background: #E6F1FB;
+}
+
+.thumb-6 {
+    background: #FBEAF0;
+}
+
+.tut-body {
+    padding: 12px 14px;
+}
+
+.tut-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+    .tut-top h3 {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+    }
+
+.lock-icon {
+    width: 14px;
+    height: 14px;
+    color: #aaa;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.tut-author {
+    font-size: 12px;
+    color: #888;
+    margin: 0 0 8px;
+}
+
+.tut-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.duration {
+    font-size: 11px;
+    color: #aaa;
+}
+
+.badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+}
+
+.badge-free {
+    background: #E1F5EE;
+    color: #085041;
+}
+
+.badge-basic {
+    background: #FAEEDA;
+    color: #633806;
+}
+
+.badge-pro {
+    background: #FAECE7;
+    color: #712B13;
+}
+
+.btn-view {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    padding: 7px;
+    border-radius: 8px;
+    background: #111;
+    color: white;
+    text-decoration: none;
+}
+
+.lock-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+.lock-cta {
+    font-size: 11px;
+    padding: 3px 10px;
+    background: #111;
+    color: white;
+    border-radius: 99px;
+    text-decoration: none;
+}

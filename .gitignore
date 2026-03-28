@@ -1,0 +1,19 @@
+# Build results
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Configuration — never upload connection strings or secrets
+appsettings*.json
+
+# NuGet
+*.nupkg
+.nuget/
+
+# OS
+.DS_Store
+Thumbs.db

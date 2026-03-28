@@ -1,0 +1,103 @@
+﻿@page "/tutorials"
+@using Microsoft.AspNetCore.Components.Authorization
+@using ColorfulKrakenStudio.Services
+@inject TutorialService TutorialService
+
+<PageTitle>Tutorials — ColorfulKrakenStudio</PageTitle>
+
+<div class="tut-header">
+    <h1>Tutorials</h1>
+    <p>Painting techniques from the world's best artists</p>
+</div>
+
+<div class="filters">
+    @foreach (var filter in availableFilters)
+    {
+        <button class="@(activeFilter == filter ? "filter on" : "filter")"
+                @onclick="() => activeFilter = filter">
+            @filter
+        </button>
+    }
+</div>
+
+<div class="tut-grid">
+    @foreach (var tutorial in filteredTutorials)
+    {
+        <div class="tut-card">
+            <div class="tut-thumb thumb-@tutorial.Id"></div>
+            <div class="tut-body">
+
+                <div class="tut-top">
+                    <h3>@tutorial.Title</h3>
+                    @if (!tutorial.IsFree)
+                    {
+                        <svg class="lock-icon" viewBox="0 0 16 16" fill="none">
+                            <rect x="3" y="7" width="10" height="8" rx="2"
+                                  stroke="currentColor" stroke-width="1.5" />
+                            <path d="M5 7V5a3 3 0 016 0v2"
+                                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    }
+                </div>
+
+                <p class="tut-author">@tutorial.Author</p>
+
+                <div class="tut-meta">
+                    <span class="badge badge-@tutorial.Plan.ToLower()">@tutorial.Plan</span>
+                    <span class="duration">@tutorial.Duration min</span>
+                </div>
+
+                <AuthorizeView>
+                    <Authorized>
+                        <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
+                    </Authorized>
+                    <NotAuthorized>
+                        @if (tutorial.IsFree)
+                        {
+                            <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
+                        }
+                        else
+                        {
+                            <div class="lock-banner">
+                                <span>Requires @tutorial.Plan plan</span>
+                                <a href="/plans" class="lock-cta">See plans</a>
+                            </div>
+                        }
+                    </NotAuthorized>
+                </AuthorizeView>
+
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string activeFilter = "All";
+    private bool isLoading = true;
+
+    private List<string> availableFilters = new() { "All", "Free", "Basic", "Pro" };
+    private List<ColorfulKrakenStudio.Models.Tutorial> allTutorials = new();
+    private List<ColorfulKrakenStudio.Models.Tutorial> filteredTutorials = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allTutorials = await TutorialService.GetAllAsync();
+        filteredTutorials = allTutorials;
+        isLoading = false;
+    }
+
+    private void SetFilter(string filter)
+    {
+        activeFilter = filter;
+        filteredTutorials = filter == "All"
+            ? allTutorials
+            : allTutorials.Where(t => t.Plan == filter).ToList();
+    }
+
+    // private static string GetPolicy(string plan) => plan switch
+    // {
+    //     "Basic" => "IsBasicOrHigher",
+    //     "Pro" => "IsPro",
+    //     _ => "FreeAccess"
+    // };
+}
