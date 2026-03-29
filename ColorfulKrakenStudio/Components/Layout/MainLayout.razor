@@ -12,10 +12,13 @@
             </nav>
 
             <div class="navbar-auth">
-                <AuthorizeView>
+                <AuthorizeView Context="authContext">
                     <Authorized>
-                        <span class="navbar-user">Hi, Helio<!--@context.User.Identity?.Name--></span>
+                        <span class="navbar-user">Hi, @authContext.User.Identity?.Name</span>
                         <a href="/account">My account</a>
+                        <form action="/auth/logout" method="post" style="display:inline">
+                            <button type="submit" class="btn-logout">Log out</button>
+                        </form>
                     </Authorized>
                     <NotAuthorized>
                         <a href="/register" class="btn-register">Sign up</a>

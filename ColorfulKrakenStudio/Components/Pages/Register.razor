@@ -1,0 +1,70 @@
+﻿@page "/register"
+@rendermode InteractiveServer
+@using ColorfulKrakenStudio.Services
+@inject AuthService AuthService          
+@inject NavigationManager Navigation
+
+<PageTitle>Sign up — ColorfulKrakenStudio</PageTitle>
+
+<div class="auth-container">
+    <h1>Create your account</h1>
+
+    @if (errorMessage != string.Empty)
+    {
+        <div class="auth-error">@errorMessage</div>
+    }
+
+    <div class="auth-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label>First name</label>
+                <input type="text" @bind="firstName" placeholder="John" />
+            </div>
+            <div class="form-group">
+                <label>Last name</label>
+                <input type="text" @bind="lastName" placeholder="Doe" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" @bind="email" placeholder="john@example.com" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" @bind="password" placeholder="Min. 8 characters" />
+        </div>
+
+        <button type="button" class="btn-submit" @onclick="HandleRegister" disabled="@isLoading">
+            @(isLoading ? "Creating account..." : "Sign up")
+        </button>
+
+        <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+</div>
+
+@code {
+    private string firstName    = string.Empty;
+    private string lastName     = string.Empty;
+    private string email        = string.Empty;
+    private string password     = string.Empty;
+    private string errorMessage = string.Empty;
+    private bool   isLoading    = false;
+
+    private async Task HandleRegister()
+    {
+        isLoading    = true;
+        errorMessage = string.Empty;
+
+        var result = await AuthService.RegisterAsync(firstName, lastName, email, password);
+
+        if (result.Succeeded)
+        {
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            errorMessage = result.Errors.First().Description;
+            isLoading    = false;
+        }
+    }
+}

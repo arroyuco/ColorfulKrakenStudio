@@ -17,3 +17,8 @@ appsettings*.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Publish
+**/Properties/PublishProfiles/
+*.pubxml
+*.pubxml.user

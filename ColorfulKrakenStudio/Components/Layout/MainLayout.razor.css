@@ -78,3 +78,13 @@
 .content {
     padding-top: 56px;
 }
+
+.btn-logout {
+    padding: 6px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #444;
+    background: transparent;
+    cursor: pointer;
+}

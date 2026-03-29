@@ -43,7 +43,9 @@
                 <p class="tut-author">@tutorial.Author</p>
 
                 <div class="tut-meta">
-                    <span class="badge badge-@tutorial.Plan.ToLower()">@tutorial.Plan</span>
+                    <span class="badge @(tutorial.IsFree ? "badge-free" : "badge-paid")">
+                        @(tutorial.IsFree ? "Free" : $"€{tutorial.Price}")
+                    </span>
                     <span class="duration">@tutorial.Duration min</span>
                 </div>
 
@@ -59,8 +61,8 @@
                         else
                         {
                             <div class="lock-banner">
-                                <span>Requires @tutorial.Plan plan</span>
-                                <a href="/plans" class="lock-cta">See plans</a>
+                                <span>Purchase to unlock · €@tutorial.Price</span>
+                                <a href="/purchase/@tutorial.Id" class="lock-cta">Buy now</a>
                             </div>
                         }
                     </NotAuthorized>
@@ -74,8 +76,8 @@
 @code {
     private string activeFilter = "All";
     private bool isLoading = true;
-
-    private List<string> availableFilters = new() { "All", "Free", "Basic", "Pro" };
+    
+    private List<string> availableFilters = new() { "All", "Free", "Paid" };
     private List<ColorfulKrakenStudio.Models.Tutorial> allTutorials = new();
     private List<ColorfulKrakenStudio.Models.Tutorial> filteredTutorials = new();
 
@@ -89,15 +91,11 @@
     private void SetFilter(string filter)
     {
         activeFilter = filter;
-        filteredTutorials = filter == "All"
-            ? allTutorials
-            : allTutorials.Where(t => t.Plan == filter).ToList();
+        filteredTutorials = filter switch
+        {
+            "Free" => allTutorials.Where(t => t.IsFree).ToList(),
+            "Paid" => allTutorials.Where(t => !t.IsFree).ToList(),
+            _ => allTutorials
+        };
     }
-
-    // private static string GetPolicy(string plan) => plan switch
-    // {
-    //     "Basic" => "IsBasicOrHigher",
-    //     "Pro" => "IsPro",
-    //     _ => "FreeAccess"
-    // };
 }

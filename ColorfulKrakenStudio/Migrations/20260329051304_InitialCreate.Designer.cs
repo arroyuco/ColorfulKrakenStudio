@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ColorfulKrakenStudio.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260328151049_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20260329051304_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
