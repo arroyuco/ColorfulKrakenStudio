@@ -13,7 +13,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -154,3 +154,70 @@ h1:focus {
     .auth-switch a {
         color: #111;
     }
+
+.detail-container {
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.detail-header {
+    margin-bottom: 2rem;
+}
+
+    .detail-header h1 {
+        font-size: 1.75rem;
+        font-weight: 500;
+        margin: 0 0 8px;
+    }
+
+.detail-meta {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+}
+
+.purchase-block {
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+    .purchase-block p {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 8px;
+    }
+
+.purchase-price {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #111 !important;
+    margin: 8px 0 24px !important;
+}
+
+.btn-purchase {
+    display: inline-block;
+    padding: 12px 32px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+    .btn-purchase:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+.tutorial-content {
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+}

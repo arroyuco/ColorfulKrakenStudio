@@ -1,12 +1,16 @@
-using ColorfulKrakenStudio.Client.Pages;
 using ColorfulKrakenStudio.Components;
 using ColorfulKrakenStudio.Data;
 using ColorfulKrakenStudio.Services;
 using ColorfulKrakenStudio.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+using CustomerApp = ColorfulKrakenStudio.Models.Customer;
+using ColorfulKrakenStudio.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -23,7 +27,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         errorNumbersToAdd: null)));
 
 //Identity configuration
-builder.Services.AddIdentity<Customer, IdentityRole>(options =>
+builder.Services.AddIdentity<CustomerApp, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 8;
     options.Password.RequireDigit = true;
@@ -41,7 +45,9 @@ builder.Services.AddAuthorization();
 
 //Services inyection
 builder.Services.AddScoped<TutorialService>();
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<AuthService>(); 
+builder.Services.AddScoped<StripeService>();
+builder.Services.AddScoped<PurchaseService>();
 
 var app = builder.Build();
 
@@ -66,32 +72,9 @@ app.MapStaticAssets();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//Endpoint authentication
-app.MapPost("/auth/login", async (
-    HttpContext httpContext,
-    SignInManager<Customer> signInManager) =>
-{
-    var form = httpContext.Request.Form;
-    var email = form["email"].ToString();
-    var password = form["password"].ToString();
-    var remember = form["rememberMe"] == "true";
-
-    var result = await signInManager.PasswordSignInAsync(email, password, remember, lockoutOnFailure: false);
-
-    if (result.Succeeded) return Results.Redirect("/");
-    if (result.IsLockedOut) return Results.Redirect("/login?error=2");
-    if (result.IsNotAllowed) return Results.Redirect("/login?error=3");
-
-    return Results.Redirect("/login?error=1");
-});
-
-//Endpoint logout
-app.MapPost("/auth/logout", async (
-    SignInManager<Customer> signInManager) =>
-{
-    await signInManager.SignOutAsync();
-    return Results.Redirect("/");
-});
+//Endpoints 
+app.MapAuthEndpoints();
+app.MapStripeEndpoints();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

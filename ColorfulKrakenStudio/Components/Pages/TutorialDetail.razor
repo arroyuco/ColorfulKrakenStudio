@@ -1,0 +1,100 @@
+﻿@page "/tutorials/{Id:int}"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using ColorfulKrakenStudio.Services
+@inject TutorialService TutorialService
+@inject PurchaseService PurchaseService
+@inject StripeService StripeService
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>@(tutorial?.Title ?? "Tutorial") — ColorfulKrakenStudio</PageTitle>
+
+@if (isLoading)
+{
+    <p class="loading">Loading...</p>
+}
+else if (tutorial == null)
+{
+    <p>Tutorial not found.</p>
+}
+else
+{
+    <div class="detail-container">
+        <div class="detail-header">
+            <h1>@tutorial.Title</h1>
+            <p class="detail-meta">By @tutorial.Author · @tutorial.Duration min</p>
+        </div>
+
+        @if (tutorial.IsFree || hasAccess)
+        {
+            <!-- Contenido del tutorial — visible si es gratis o si lo ha comprado -->
+            <div class="tutorial-content">
+                <p>Tutorial content goes here.</p>
+            </div>
+        }
+        else
+        {
+            <!-- Bloque de compra — visible si no tiene acceso -->
+            <div class="purchase-block">
+                <p>Get lifetime access to this tutorial.</p>
+                <p class="purchase-price">€@tutorial.Price</p>
+
+                @if (isAuthenticated)
+                {
+                    <button type="button" class="btn-purchase" @onclick="HandlePurchase" disabled="@isPurchasing">
+                        @(isPurchasing ? "Redirecting to payment..." : "Buy now")
+                    </button>
+                }
+                else
+                {
+                    <a href="/login" class="btn-purchase">Log in to purchase</a>
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private ColorfulKrakenStudio.Models.Tutorial? tutorial;
+    private bool isLoading = true;
+    private bool hasAccess = false;
+    private bool isAuthenticated = false;
+    private bool isPurchasing = false;
+    private string customerId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tutorial = await TutorialService.GetByIdAsync(Id);
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        isAuthenticated = user.Identity?.IsAuthenticated ?? false;
+
+        if (isAuthenticated)
+        {
+            // El Id del usuario en Identity está en el claim NameIdentifier
+            customerId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            hasAccess = await PurchaseService.HasAccessAsync(customerId, Id);
+        }
+
+        isLoading = false;
+    }
+
+    private async Task HandlePurchase()
+    {
+        isPurchasing = true;
+
+        var checkoutUrl = await StripeService.CreateCheckoutSessionAsync(
+            tutorial!,
+            customerId,
+            string.Empty);
+
+        // Redirige a Stripe — forceLoad necesario para salir de Blazor
+        Navigation.NavigateTo(checkoutUrl, forceLoad: true);
+    }
+}

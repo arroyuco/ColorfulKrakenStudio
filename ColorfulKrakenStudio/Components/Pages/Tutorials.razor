@@ -1,4 +1,5 @@
 ﻿@page "/tutorials"
+@using ColorfulKrakenStudio.Models
 @using Microsoft.AspNetCore.Components.Authorization
 @using ColorfulKrakenStudio.Services
 @inject TutorialService TutorialService
@@ -62,7 +63,7 @@
                         {
                             <div class="lock-banner">
                                 <span>Purchase to unlock · €@tutorial.Price</span>
-                                <a href="/purchase/@tutorial.Id" class="lock-cta">Buy now</a>
+                                <a href="/tutorials/@tutorial.Id" class="lock-cta">Buy now</a>
                             </div>
                         }
                     </NotAuthorized>
@@ -78,8 +79,8 @@
     private bool isLoading = true;
     
     private List<string> availableFilters = new() { "All", "Free", "Paid" };
-    private List<ColorfulKrakenStudio.Models.Tutorial> allTutorials = new();
-    private List<ColorfulKrakenStudio.Models.Tutorial> filteredTutorials = new();
+    private List<Tutorial> allTutorials = new();
+    private List<Tutorial> filteredTutorials = new();
 
     protected override async Task OnInitializedAsync()
     {
