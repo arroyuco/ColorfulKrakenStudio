@@ -7,8 +7,30 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using CustomerApp = ColorfulKrakenStudio.Models.Customer;
 using ColorfulKrakenStudio.Endpoints;
+using Serilog;
+
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+    .AddUserSecrets<Program>()
+    .Build();
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: configuration["Serilog:LogPath"]!,
+        rollingInterval: RollingInterval.Day,        
+        retainedFileCountLimit: 30,                  
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+    )
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
 
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 

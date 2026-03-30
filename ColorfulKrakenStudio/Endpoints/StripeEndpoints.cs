@@ -1,4 +1,5 @@
-﻿using ColorfulKrakenStudio.Services;
+﻿using ColorfulKrakenStudio.Models;
+using ColorfulKrakenStudio.Services;
 using Stripe;
 
 namespace ColorfulKrakenStudio.Endpoints
@@ -9,7 +10,8 @@ namespace ColorfulKrakenStudio.Endpoints
         {
             app.MapPost("/webhook/stripe", async (
                 HttpContext httpContext,
-                PurchaseService purchaseService) =>
+                PurchaseService purchaseService,
+                ILogger<Program> logger) =>
             {
                 var json = await new StreamReader(httpContext.Request.Body).ReadToEndAsync();
                 var webhookSecret = app.Configuration["Stripe:WebhookSecret"];
@@ -30,14 +32,17 @@ namespace ColorfulKrakenStudio.Endpoints
                         var amount = (session?.AmountTotal ?? 0) / 100m;
 
                         if (customerId != null && tutorialId > 0)
+                        {
+                            logger.LogInformation($"Payment completed for tutorial {tutorialId} by customer {customerId}");
                             await purchaseService.RegisterPurchaseAsync(customerId, tutorialId, amount);
+                            logger.LogInformation("Purchase registered successfully");
+                        }
                     }
-
                     return Results.Ok();
                 }
-                catch (StripeException)
+                catch (StripeException ex)
                 {
-                    // Si la firma no es válida devolvemos 400 — Stripe reintentará el webhook
+                    logger.LogError(ex, "Stripe webhook signature validation failed");
                     return Results.BadRequest();
                 }
             });
