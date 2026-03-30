@@ -65,6 +65,7 @@ else
     private bool isAuthenticated = false;
     private bool isPurchasing = false;
     private string customerId = string.Empty;
+    private string customerEmail = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,8 +78,8 @@ else
 
         if (isAuthenticated)
         {
-            // El Id del usuario en Identity está en el claim NameIdentifier
             customerId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            customerEmail = user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
             hasAccess = await PurchaseService.HasAccessAsync(customerId, Id);
         }
 
@@ -92,7 +93,7 @@ else
         var checkoutUrl = await StripeService.CreateCheckoutSessionAsync(
             tutorial!,
             customerId,
-            string.Empty);
+            customerEmail);
 
         // Redirige a Stripe — forceLoad necesario para salir de Blazor
         Navigation.NavigateTo(checkoutUrl, forceLoad: true);

@@ -69,6 +69,13 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     };
 });
 
+//Keep alive application for 10 minutes after disconnection (like stripe payment. 3 min by default)
+//builder.Services.AddRazorComponents()
+//    .AddInteractiveServerComponents(options =>
+//    {
+//        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(10);
+//    });
+
 //Identity configuration
 builder.Services.AddIdentity<CustomerApp, IdentityRole>(options =>
 {
