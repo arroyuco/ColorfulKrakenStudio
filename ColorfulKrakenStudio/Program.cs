@@ -1,13 +1,17 @@
+using ColorfulKrakenStudio;
 using ColorfulKrakenStudio.Components;
 using ColorfulKrakenStudio.Data;
-using ColorfulKrakenStudio.Services;
-using ColorfulKrakenStudio.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Stripe;
-using CustomerApp = ColorfulKrakenStudio.Models.Customer;
 using ColorfulKrakenStudio.Endpoints;
+using ColorfulKrakenStudio.Resources;
+using ColorfulKrakenStudio.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Serilog;
+using Stripe;
+using System.Globalization;
+using CustomerApp = ColorfulKrakenStudio.Models.Customer;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -47,6 +51,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         maxRetryCount: 5,
         maxRetryDelay: TimeSpan.FromSeconds(30),
         errorNumbersToAdd: null)));
+
+//Localization configuration
+builder.Services.AddLocalization(options => options.ResourcesPath = "");
+var supportedCultures = new[] { "en", "es" };
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("en");
+    options.SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+    options.SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+
+    // Orden de detección: cookie primero, luego navegador
+    options.RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new CookieRequestCultureProvider(),
+        new AcceptLanguageHeaderRequestCultureProvider()
+    };
+});
 
 //Identity configuration
 builder.Services.AddIdentity<CustomerApp, IdentityRole>(options =>
@@ -97,6 +118,9 @@ app.UseAuthorization();
 //Endpoints 
 app.MapAuthEndpoints();
 app.MapStripeEndpoints();
+app.MapLocalizationEndpoints();
+
+app.UseRequestLocalization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

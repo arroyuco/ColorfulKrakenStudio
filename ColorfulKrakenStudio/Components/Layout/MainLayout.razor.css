@@ -88,3 +88,22 @@
     background: transparent;
     cursor: pointer;
 }
+
+.lang-selector {
+    display: flex;
+    align-items: center;
+}
+
+.lang-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+    border: none;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+    .lang-btn:hover {
+        color: #111;
+    }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter</value>
+	</resheader>
+
+	<data name="Nav_Tutorials">
+		<value>Tutoriales</value>
+	</data>
+	<data name="Nav_Articles">
+		<value>Artículos</value>
+	</data>
+	<data name="Nav_Plans">
+		<value>Planes</value>
+	</data>
+	<data name="Nav_MyAccount">
+		<value>Mi cuenta</value>
+	</data>
+	<data name="Nav_Login">
+		<value>Entrar</value>
+	</data>
+	<data name="Nav_SignUp">
+		<value>Registrarse</value>
+	</data>
+	<data name="Nav_Logout">
+		<value>Salir</value>
+	</data>
+	<data name="Home_Hero_Title">
+		<value>Aprende a pintar miniaturas de forma rápida y con grandes resultados</value>
+	</data>
+	<data name="Home_Hero_Subtitle">
+		<value>Tutoriales premium creados por los mejores pintores del mundo</value>
+	</data>
+	<data name="Home_Hero_Browse">
+		<value>Ver tutoriales</value>
+	</data>
+	<data name="Home_Hero_SignUp">
+		<value>Registrarse gratis</value>
+	</data>
+	<data name="Home_Featured">
+		<value>Tutoriales destacados</value>
+	</data>
+	<data name="Home_Plans">
+		<value>Planes</value>
+	</data>
+	<data name="Tutorials_Title">
+		<value>Tutoriales</value>
+	</data>
+	<data name="Tutorials_Subtitle">
+		<value>Técnicas de pintura de los mejores artistas del mundo</value>
+	</data>
+	<data name="Tutorials_Filter_All">
+		<value>Todos</value>
+	</data>
+	<data name="Tutorials_Filter_Free">
+		<value>Gratis</value>
+	</data>
+	<data name="Tutorials_Filter_Paid">
+		<value>De pago</value>
+	</data>
+	<data name="Tutorial_Free">
+		<value>Gratis</value>
+	</data>
+	<data name="Tutorial_BuyNow">
+		<value>Comprar</value>
+	</data>
+	<data name="Tutorial_RequiresPlan">
+		<value>Compra para desbloquear</value>
+	</data>
+	<data name="Auth_Login_Title">
+		<value>Bienvenido de nuevo</value>
+	</data>
+	<data name="Auth_Login_Button">
+		<value>Entrar</value>
+	</data>
+	<data name="Auth_Login_NoAccount">
+		<value>¿No tienes cuenta?</value>
+	</data>
+	<data name="Auth_Register_Title">
+		<value>Crea tu cuenta</value>
+	</data>
+	<data name="Auth_Register_Button">
+		<value>Registrarse</value>
+	</data>
+	<data name="Auth_Register_HasAccount">
+		<value>¿Ya tienes cuenta?</value>
+	</data>
+	<data name="Auth_Error_Invalid">
+		<value>Email o contraseña incorrectos.</value>
+	</data>
+	<data name="Auth_Error_Locked">
+		<value>Tu cuenta ha sido bloqueada. Inténtalo más tarde.</value>
+	</data>
+	<data name="Auth_Error_NotAllowed">
+		<value>Debes confirmar tu email antes de iniciar sesión.</value>
+	</data>
+</root>
