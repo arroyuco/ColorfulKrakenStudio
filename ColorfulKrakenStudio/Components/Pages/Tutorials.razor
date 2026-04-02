@@ -4,6 +4,7 @@
 @using ColorfulKrakenStudio.Services
 @inject TutorialService TutorialService
 @inject CurrentUserService CurrentUser
+@inject PurchaseService PurchaseService
 
 <PageTitle>Tutorials — ColorfulKrakenStudio</PageTitle>
 
@@ -51,23 +52,27 @@
                     <span class="duration">@tutorial.Duration min</span>
                 </div>
 
-                @if (CurrentUser.IsAuthenticated)
+                @if (tutorial.IsFree)
                 {
                     <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
                 }
+                else if (CurrentUser.IsAuthenticated && purchasedIds.Contains(tutorial.Id))
+                {
+                    <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
+                }
+                else if (CurrentUser.IsAuthenticated)
+                {
+                    <div class="lock-banner">
+                        <span>Purchase to unlock · €@tutorial.Price</span>
+                        <a href="/tutorials/@tutorial.Id" class="lock-cta">Buy now</a>
+                    </div>
+                }
                 else
                 {
-                    @if (tutorial.IsFree)
-                    {
-                        <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
-                    }
-                    else
-                    {
-                        <div class="lock-banner">
-                            <span>Purchase to unlock · €@tutorial.Price</span>
-                            <a href="/tutorials/@tutorial.Id" class="lock-cta">Buy now</a>
-                        </div>
-                    }
+                    <div class="lock-banner">
+                        <span>Purchase to unlock · €@tutorial.Price</span>
+                        <a href="/login" class="lock-cta">Log in to purchase</a>
+                    </div>
                 }
 
             </div>
@@ -82,11 +87,16 @@
     private List<string> availableFilters = new() { "All", "Free", "Paid" };
     private List<Tutorial> allTutorials = new();
     private List<Tutorial> filteredTutorials = new();
+    private List<int> purchasedIds = new();
 
     protected override async Task OnInitializedAsync()
     {
         allTutorials = await TutorialService.GetAllAsync();
         filteredTutorials = allTutorials;
+
+        if (CurrentUser.IsAuthenticated)
+            purchasedIds = await PurchaseService.GetPurchasedTutorialIdsAsync(CurrentUser.Id);
+
         isLoading = false;
     }
 
