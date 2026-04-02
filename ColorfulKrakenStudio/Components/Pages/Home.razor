@@ -1,7 +1,12 @@
 ﻿@page "/"
 
 @using ColorfulKrakenStudio.Services
+@using ColorfulKrakenStudio.Models
+@using Microsoft.AspNetCore.Identity
+@inject PurchaseService PurchaseService
+@inject UserManager<Customer> UserManager
 @inject TutorialService TutorialService
+@inject CurrentUserService CurrentUser
 
 <PageTitle>ColorfulKrakenStudio — Miniature Painting Tutorials</PageTitle>
 
@@ -10,7 +15,10 @@
     <p>Premium tutorials created by some of the world's best painters.</p>
     <div class="hero-buttons">
         <a href="/tutorials" class="btn-primary">Browse tutorials</a>
-        <a href="/register" class="btn-secondary">Sign up for free</a>
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <a href="/register" class="btn-secondary">Sign up for free</a>
+        }
     </div>
 </section>
 

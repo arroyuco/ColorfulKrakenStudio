@@ -45,7 +45,7 @@ builder.Services.AddRazorComponents()
 
 
 //Database connection
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
     sqlOptions => sqlOptions.EnableRetryOnFailure(
         maxRetryCount: 5,
@@ -97,7 +97,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<TutorialService>();
 builder.Services.AddScoped<AuthService>(); 
 builder.Services.AddScoped<StripeService>();
-builder.Services.AddScoped<PurchaseService>();
+builder.Services.AddScoped<PurchaseService>(); 
+builder.Services.AddScoped<CurrentUserService>();
 
 var app = builder.Build();
 

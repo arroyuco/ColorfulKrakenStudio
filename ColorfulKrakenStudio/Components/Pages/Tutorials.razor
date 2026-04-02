@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using ColorfulKrakenStudio.Services
 @inject TutorialService TutorialService
+@inject CurrentUserService CurrentUser
 
 <PageTitle>Tutorials — ColorfulKrakenStudio</PageTitle>
 
@@ -50,24 +51,24 @@
                     <span class="duration">@tutorial.Duration min</span>
                 </div>
 
-                <AuthorizeView>
-                    <Authorized>
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
+                }
+                else
+                {
+                    @if (tutorial.IsFree)
+                    {
                         <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
-                    </Authorized>
-                    <NotAuthorized>
-                        @if (tutorial.IsFree)
-                        {
-                            <a href="/tutorials/@tutorial.Id" class="btn-view">Watch tutorial</a>
-                        }
-                        else
-                        {
-                            <div class="lock-banner">
-                                <span>Purchase to unlock · €@tutorial.Price</span>
-                                <a href="/tutorials/@tutorial.Id" class="lock-cta">Buy now</a>
-                            </div>
-                        }
-                    </NotAuthorized>
-                </AuthorizeView>
+                    }
+                    else
+                    {
+                        <div class="lock-banner">
+                            <span>Purchase to unlock · €@tutorial.Price</span>
+                            <a href="/tutorials/@tutorial.Id" class="lock-cta">Buy now</a>
+                        </div>
+                    }
+                }
 
             </div>
         </div>

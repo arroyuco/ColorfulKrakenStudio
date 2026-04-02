@@ -6,19 +6,25 @@ namespace ColorfulKrakenStudio.Services;
 
 public class TutorialService
 {
-    private readonly AppDbContext _db;
+    private readonly IDbContextFactory<AppDbContext> _db;
 
-    public TutorialService(AppDbContext db)
+    public TutorialService(IDbContextFactory<AppDbContext> db)
     {
         _db = db;
     }
 
     public async Task<List<Tutorial>> GetAllAsync()
-        => await _db.Tutorials
+    {
+        await using var ctx = await _db.CreateDbContextAsync();
+        return await ctx.Tutorials
             .Where(t => t.IsPublished)
             .OrderBy(t => t.Id)
             .ToListAsync();
+    }
 
     public async Task<Tutorial?> GetByIdAsync(int id)
-        => await _db.Tutorials.FindAsync(id);
+    {
+        await using var ctx = await _db.CreateDbContextAsync();
+        return await ctx.Tutorials.FindAsync(id);
+    }
 }

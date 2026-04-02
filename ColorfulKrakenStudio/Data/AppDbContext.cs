@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ColorfulKrakenStudio.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using ColorfulKrakenStudio.Models;
 
 namespace ColorfulKrakenStudio.Data;
 

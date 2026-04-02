@@ -1,7 +1,11 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@using ColorfulKrakenStudio.Services
 @using Microsoft.Extensions.Localization
 @using ColorfulKrakenStudio.Resources
 @inject IStringLocalizer<SharedResources> L
+@inject CurrentUserService CurrentUser
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="page">
     <header class="navbar">
@@ -16,7 +20,7 @@
             <div class="navbar-auth">
                 <AuthorizeView Context="authContext">
                     <Authorized>
-                        <span class="navbar-user">Hi, @authContext.User.Identity?.Name</span>
+                        <span class="navbar-user">Hi, @CurrentUser.FullName</span>
                         <a href="/account">@L["Nav_MyAccount"]</a>
                         <form action="/auth/logout" method="post" style="display:inline">
                             <button type="submit" class="btn-logout">@L["Nav_Logout"]</button>
@@ -42,3 +46,10 @@
         @Body
     </main>
 </div>
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        await CurrentUser.GetCustomerAsync(authState.User);
+    }
+}
